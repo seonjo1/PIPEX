@@ -6,7 +6,7 @@
 /*   By: seonjo <seonjo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 15:54:02 by seonjo            #+#    #+#             */
-/*   Updated: 2023/08/23 19:07:21 by seonjo           ###   ########.fr       */
+/*   Updated: 2023/08/23 20:10:58 by seonjo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,18 +45,25 @@ int	get_fd2(int argc, char **argv)
 
 	// check_argv(argc, argv); 
 	if (access(argv[argc - 1], F_OK) == 0)
-		unlink(argv[argc - 1]);
+		if (unlink(argv[argc - 1] == -1))
+			error("unlink fail");
 	fd2 = ft_open(argv[argc - 1], 2);
 	return (fd2);
 }
 
 int	all_read(int argc, char **argv)
 {
-	int	fd2;
+	int		fd2;
+	char	*line;
 
 	fd2 = ft_open(argv[argc - 1], 1);
-	while (get_next_line(fd2) != NULL)
-		;
+	line = get_next_line(fd2);
+	while (line != NULL)
+	{
+		free(line);
+		get_next_line(fd2);
+	}
+	free(line);
 	return (fd2);
 }
 
@@ -64,8 +71,7 @@ void	last_exe(char *cmd, int fd, int fd2)
 {
 	move_fd(1, fd2);
 	exe_cmd(cmd);
-	while (fd >= 0)
-		close(fd--);
+	exit(0);
 }
 
 int	main(int argc, char **argv)

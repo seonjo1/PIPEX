@@ -6,7 +6,7 @@
 /*   By: seonjo <seonjo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 21:41:58 by seonjo            #+#    #+#             */
-/*   Updated: 2023/08/23 18:49:09 by seonjo           ###   ########.fr       */
+/*   Updated: 2023/08/23 19:59:58 by seonjo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,6 @@ int		ft_open(char *file, int flag);
 void	error(char *err_msg);
 void	move_fd(int to, int from);
 int		here_doc(char *limiter);
+void	ft_write(int fd, char *message, int len);
 
 #endif

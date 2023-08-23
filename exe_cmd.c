@@ -6,7 +6,7 @@
 /*   By: seonjo <seonjo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 16:17:18 by seonjo            #+#    #+#             */
-/*   Updated: 2023/08/23 18:22:19 by seonjo           ###   ########.fr       */
+/*   Updated: 2023/08/23 20:07:18 by seonjo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,15 +54,23 @@ static char	*check_cmd(char	**cmd)
 	char	*path;
 
 	path = ft_strjoin("/bin/", cmd[0]);
+	if (path == NULL)
+		error("strjoin fail");
 	if (access(path, X_OK | F_OK) == 0)
 		return (path);
 	path = ft_strjoin("/sbin/", cmd[0]);
+	if (path == NULL)
+		error("strjoin fail");
 	if (access(path, X_OK | F_OK) == 0)
 		return (path);
 	path = ft_strjoin("/usr/bin/", cmd[0]);
+	if (path == NULL)
+		error("strjoin fail");
 	if (access(path, X_OK | F_OK) == 0)
 		return (path);
 	path = ft_strjoin("/usr/sbin/", cmd[0]);
+	if (path == NULL)
+		error("strjoin fail");
 	if (access(path, X_OK | F_OK) == 0)
 		return (path);
 	return (NULL);
@@ -73,8 +81,11 @@ void	exe_cmd(char *argv)
 	char	**cmd;
 
 	cmd = ft_split(argv, ' ');
+	if (cmd == NULL)
+		error("split fail");
 	cmd[0] = check_cmd(cmd);
 	if (cmd[0] == NULL)
-		ft_printf("invalid cmd\n");
-	execve(cmd[0], cmd, NULL);
+		error("invalid cmd");
+	if (execve(cmd[0], cmd, NULL) == -1)
+		error("execve fail");
 }

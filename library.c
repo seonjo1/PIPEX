@@ -6,7 +6,7 @@
 /*   By: seonjo <seonjo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 18:45:56 by seonjo            #+#    #+#             */
-/*   Updated: 2023/08/23 18:56:10 by seonjo           ###   ########.fr       */
+/*   Updated: 2023/08/23 20:02:47 by seonjo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,13 @@ int	ft_open(char *file, int flag)
 void	move_fd(int to, int from)
 {
 	close(to);
-	dup2(from, to);
+	if (dup2(from, to) == -1)
+		error("dup fail");
 	close(from);
+}
+
+void	ft_write(int fd, char *message, int len)
+{
+	if (write(fd, message, len) == -1)
+		return (-1);
 }
