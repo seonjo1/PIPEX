@@ -6,16 +6,11 @@
 /*   By: seonjo <seonjo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 15:54:02 by seonjo            #+#    #+#             */
-/*   Updated: 2023/08/23 20:10:58 by seonjo           ###   ########.fr       */
+/*   Updated: 2023/08/24 19:27:25 by seonjo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-// void	check_argv(int argc, char **argv)
-// {
-//	 ft_printf("공사 중\n");
-// }
 
 int	do_pipe(char *argv)
 {
@@ -23,80 +18,80 @@ int	do_pipe(char *argv)
 	int		pipe_fd[2];
 
 	if (pipe(pipe_fd) == -1)
-		error("pipe fail");
+		error("pipe fail", 1);
 	pid = fork();
 	if (pid == -1)
-		error("fork fail");
+		error("fork fail", 1);
 	else if (pid == 0)
 	{
-		close(pipe_fd[0]);
-		move_fd(1, pipe_fd[1]);
-		exe_cmd(argv);
-		return (-1);
+		ft_close(pipe_fd[0]);
+		exe_cmd(argv, pipe_fd[1]);
+		exit(0);
 	}
-	else
-		parents_do(pid, pipe_fd);
-	return (pipe_fd[1]);
+	return (parents_do(pid, pipe_fd));
 }
 
 int	get_fd2(int argc, char **argv)
 {
 	int	fd2;
 
-	// check_argv(argc, argv); 
 	if (access(argv[argc - 1], F_OK) == 0)
-		if (unlink(argv[argc - 1] == -1))
-			error("unlink fail");
+		if (unlink(argv[argc - 1]) == -1)
+			error("unlink fail", 1);
 	fd2 = ft_open(argv[argc - 1], 2);
 	return (fd2);
 }
 
-int	all_read(int argc, char **argv)
+int	all_read(char *file)
 {
 	int		fd2;
 	char	*line;
 
-	fd2 = ft_open(argv[argc - 1], 1);
+	fd2 = ft_open(file, 1);
 	line = get_next_line(fd2);
 	while (line != NULL)
 	{
 		free(line);
-		get_next_line(fd2);
+		line = get_next_line(fd2);
 	}
-	free(line);
 	return (fd2);
 }
 
-void	last_exe(char *cmd, int fd, int fd2)
+
+void	last_exe(char *cmd, int fd2, int flag)
 {
-	move_fd(1, fd2);
-	exe_cmd(cmd);
+	exe_cmd(cmd, fd2);
+	if (flag > 0)
+		exit(1);
 	exit(0);
 }
+
 
 int	main(int argc, char **argv)
 {
 	int		i;
 	int		fd;
 	int		fd2;
+	int		flag;
 
 	i = 2;
 	if (ft_strncmp(argv[1], "here_doc", 9) == 0)
 	{
 		if (access(argv[argc - 1], F_OK) == 0)
-			fd2 = all_read(argc, argv);
+			fd2 = all_read(argv[argc - 1]);
 		else
 			fd2 = ft_open(argv[argc - 1], 2);
-		i = here_doc(argv[2]);
+		i++;
+		here_doc(argv[2]);
 	}
 	else
 	{
-		fd2 = get_fd2(argc, argv);
+		fd2 = ft_open(argv[argc - 1], 2);
 		fd = ft_open(argv[1], 1);
 		move_fd(0, fd);
 	}
-	while (i > 0 && i < argc - 2 && fd >= 0)
-		fd = do_pipe(argv[i++]);
-	if (i > 0 && fd >= 0)
-		last_exe(argv[i], fd, fd2);
+	flag = 0;
+	while (i < argc - 2)
+		flag += do_pipe(argv[i++]);
+	last_exe(argv[i], fd2, flag);
 }

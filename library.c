@@ -6,16 +6,17 @@
 /*   By: seonjo <seonjo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 18:45:56 by seonjo            #+#    #+#             */
-/*   Updated: 2023/08/23 20:02:47 by seonjo           ###   ########.fr       */
+/*   Updated: 2023/08/24 19:28:43 by seonjo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	error(char *err_msg)
+void	error(char *err_msg, int flag)
 {
 	perror(err_msg);
-	exit(1);
+	if (flag == 1)
+		exit(1);
 }
 
 int	ft_open(char *file, int flag)
@@ -25,22 +26,28 @@ int	ft_open(char *file, int flag)
 	if (flag == 1)
 		fd = open(file, O_RDWR);
 	else
-		fd = open(file, O_CREAT | O_RDWR, 0777);
+		fd = open(file, O_CREAT | O_TRUNC | O_RDWR, 0777);
 	if (fd < 0)
-		error("open fail");
+		error("open fail", 1);
 	return (fd);
+}
+
+void	ft_close(int fd)
+{
+	if (close(fd) == -1)
+		error("close fail", 1);
 }
 
 void	move_fd(int to, int from)
 {
-	close(to);
+	ft_close(to);
 	if (dup2(from, to) == -1)
-		error("dup fail");
-	close(from);
+		error("dup fail", 1);
+	ft_close(from);
 }
 
 void	ft_write(int fd, char *message, int len)
 {
 	if (write(fd, message, len) == -1)
-		return (-1);
+		error("write fail", 1);
 }
