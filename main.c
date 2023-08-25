@@ -6,7 +6,7 @@
 /*   By: seonjo <seonjo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 15:54:02 by seonjo            #+#    #+#             */
-/*   Updated: 2023/08/25 21:23:50 by seonjo           ###   ########.fr       */
+/*   Updated: 2023/08/25 22:56:12 by seonjo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,12 @@ void	do_pipe(char *argv, char **envp)
 		parents_do(pid, pipe_fd);
 }
 
-int	get_fd2(int argc, char **argv)
-{
-	int	fd2;
-
-	if (access(argv[argc - 1], F_OK) == 0)
-		if (unlink(argv[argc - 1]) == -1)
-			error(1);
-	fd2 = ft_open(argv[argc - 1], 2);
-	return (fd2);
-}
-
 int	all_read(char *file)
 {
 	int		fd2;
 	char	*line;
 
-	fd2 = ft_open(file, 1);
+	fd2 = ft_open(file, 3);
 	line = get_next_line(fd2);
 	while (line != NULL)
 	{
@@ -64,12 +53,22 @@ int	open_fd1(char *file1)
 	fd = ft_open(file1, 1);
 	if (fd == -1)
 	{
-		here_doc(NULL);
+		here_doc(NULL, 1);
 		return (1);
 	}
 	else
 		move_fd(0, fd);
 	return (0);
+}
+
+void	last_exe_cmd(char *cmd, int fd2, char **envp)
+{
+	if (fd2 < 0)
+	{
+		ft_printf("Permission denied\n");
+		exit(1);
+	}
+	exe_cmd(cmd, fd2, envp);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -86,8 +85,8 @@ int	main(int argc, char **argv, char **envp)
 			fd2 = all_read(argv[argc - 1]);
 		else
 			fd2 = ft_open(argv[argc - 1], 2);
+		here_doc(argv[2], argc);
 		i++;
-		here_doc(argv[2]);
 	}
 	else
 	{
@@ -96,6 +95,5 @@ int	main(int argc, char **argv, char **envp)
 	}
 	while (i < argc - 2)
 		do_pipe(argv[i++], envp);
-	if (fd2 >= 0)
-		exe_cmd(argv[i], fd2, envp);
+	last_exe_cmd(argv[i], fd2, envp);
 }

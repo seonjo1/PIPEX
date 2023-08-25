@@ -6,7 +6,7 @@
 /*   By: seonjo <seonjo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 18:20:11 by seonjo            #+#    #+#             */
-/*   Updated: 2023/08/25 20:59:20 by seonjo           ###   ########.fr       */
+/*   Updated: 2023/08/25 22:08:33 by seonjo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ static void	loop_find_limiter(char *limiter, int *pipe_fd)
 	int		len;
 	char	*line;
 
-	len = ft_strlen(limiter);
 	write(1, "pipe heredoc> ", 14);
+	len = ft_strlen(limiter);
 	line = get_next_line(0);
 	while (ft_strncmp(limiter, line, len) != 0)
 	{
@@ -47,16 +47,19 @@ static void	loop_find_limiter(char *limiter, int *pipe_fd)
 		free(line);
 		line = get_next_line(0);
 	}
-	free(line);
+	if (line != NULL)
+		free(line);
 }
 
-void	here_doc(char *limiter)
+void	here_doc(char *limiter, int argc)
 {
 	pid_t	pid;
 	int		pipe_fd[2];
 
 	if (pipe(pipe_fd) == -1)
 		error(1);
+	if (argc == 5)
+		exit(1);
 	pid = fork();
 	if (pid == -1)
 		error(1);
