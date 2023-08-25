@@ -6,13 +6,13 @@
 /*   By: seonjo <seonjo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 15:54:02 by seonjo            #+#    #+#             */
-/*   Updated: 2023/08/25 16:00:46 by seonjo           ###   ########.fr       */
+/*   Updated: 2023/08/25 21:23:50 by seonjo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	do_pipe(char *argv, char **envp)
+void	do_pipe(char *argv, char **envp)
 {
 	pid_t	pid;
 	int		pipe_fd[2];
@@ -26,9 +26,9 @@ int	do_pipe(char *argv, char **envp)
 	{
 		ft_close(pipe_fd[0]);
 		exe_cmd(argv, pipe_fd[1], envp);
-		exit(0);
 	}
-	return (parents_do(pid, pipe_fd));
+	else
+		parents_do(pid, pipe_fd);
 }
 
 int	get_fd2(int argc, char **argv)
@@ -57,25 +57,30 @@ int	all_read(char *file)
 	return (fd2);
 }
 
+int	open_fd1(char *file1)
+{	
+	int	fd;
 
-void	last_exe(char *cmd, int fd2, int flag, char **envp)
-{
-	exe_cmd(cmd, fd2, envp);
-	if (flag > 0)
-		exit(1);
-	exit(0);
+	fd = ft_open(file1, 1);
+	if (fd == -1)
+	{
+		here_doc(NULL);
+		return (1);
+	}
+	else
+		move_fd(0, fd);
+	return (0);
 }
-
 
 int	main(int argc, char **argv, char **envp)
 {
 	int		i;
-	int		fd;
 	int		fd2;
-	int		flag;
 
 	i = 2;
-	if (ft_strncmp(argv[1], "here_doc", 9) == 0)
+	if (argc < 5)
+		exit(1);
+	else if (ft_strncmp(argv[1], "here_doc", 9) == 0)
 	{
 		if (access(argv[argc - 1], F_OK) == 0)
 			fd2 = all_read(argv[argc - 1]);
@@ -87,15 +92,10 @@ int	main(int argc, char **argv, char **envp)
 	else
 	{
 		fd2 = ft_open(argv[argc - 1], 2);
-		fd = ft_open(argv[1], 1);
-		if (fd > 0)
-		{
-			move_fd(0, fd);
-			i++;
-		}
+		i += open_fd1(argv[1]);
 	}
-	flag = 0;
 	while (i < argc - 2)
-		flag += do_pipe(argv[i++], envp);
-	last_exe(argv[i], fd2, flag, envp);
+		do_pipe(argv[i++], envp);
+	if (fd2 >= 0)
+		exe_cmd(argv[i], fd2, envp);
 }

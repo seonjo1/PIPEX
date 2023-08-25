@@ -6,7 +6,7 @@
 /*   By: seonjo <seonjo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 16:17:18 by seonjo            #+#    #+#             */
-/*   Updated: 2023/08/25 15:48:46 by seonjo           ###   ########.fr       */
+/*   Updated: 2023/08/25 20:53:24 by seonjo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,10 @@
 
 int	parents_do(pid_t pid, int *pipe_fd)
 {
-	int	status;
-
-	status = 0;
-	waitpid(pid, &status, 0);
-	if (status == 1)
-		exit(1);
 	ft_close(pipe_fd[1]);
+	waitpid(pid, NULL, 0);
 	move_fd(0, pipe_fd[0]);
-	return (status);
+	return (1);
 }
 
 size_t	ft_strlen(const char *s)

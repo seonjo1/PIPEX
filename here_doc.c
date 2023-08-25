@@ -6,7 +6,7 @@
 /*   By: seonjo <seonjo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 18:20:11 by seonjo            #+#    #+#             */
-/*   Updated: 2023/08/25 15:37:19 by seonjo           ###   ########.fr       */
+/*   Updated: 2023/08/25 20:59:20 by seonjo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ void	here_doc(char *limiter)
 	else if (pid == 0)
 	{
 		ft_close(pipe_fd[0]);
+		if (limiter == NULL)
+			exit(0);
 		limiter = ft_strjoin(limiter, "\n", 0);
 		if (limiter == NULL)
 			error(1);
