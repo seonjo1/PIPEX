@@ -1,11 +1,10 @@
 #include "pipex.h"
+#include <stdio.h>
 
-int main(void)
+int main(int argc, char **argv, char **envp)
 {
-	char	*cmd[3];
-
-	cmd[0] = "/bin/ls";
-	cmd[1] = "-ld2";
-	cmd[2] = NULL;
-	execve("/bin/ls", cmd, NULL);
+	int i = argc - argc;
+	argv[0] = "hello";
+	while (envp[i] != NULL)
+		printf("%s\n", envp[i++]);
 }

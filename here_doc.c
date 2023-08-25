@@ -6,7 +6,7 @@
 /*   By: seonjo <seonjo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 18:20:11 by seonjo            #+#    #+#             */
-/*   Updated: 2023/08/24 18:24:49 by seonjo           ###   ########.fr       */
+/*   Updated: 2023/08/25 15:37:19 by seonjo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,16 +56,16 @@ void	here_doc(char *limiter)
 	int		pipe_fd[2];
 
 	if (pipe(pipe_fd) == -1)
-		error("pipe fail", 1);
+		error(1);
 	pid = fork();
 	if (pid == -1)
-		error("fork fail", 1);
+		error(1);
 	else if (pid == 0)
 	{
 		ft_close(pipe_fd[0]);
-		limiter = ft_strjoin(limiter, "\n");
+		limiter = ft_strjoin(limiter, "\n", 0);
 		if (limiter == NULL)
-			error("allocate fail", 1);
+			error(1);
 		loop_find_limiter(limiter, pipe_fd);
 		free(limiter);
 		exit(0);
