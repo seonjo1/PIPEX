@@ -6,7 +6,7 @@
 /*   By: seonjo <seonjo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 21:41:58 by seonjo            #+#    #+#             */
-/*   Updated: 2023/08/25 21:45:48 by seonjo           ###   ########.fr       */
+/*   Updated: 2023/08/27 20:54:57 by seonjo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,14 @@ int		parents_do(pid_t pid, int *pipe_fd);
 int		ft_open(char *file, int flag);
 char	**ft_split(char const *s, char c);
 char	*ft_strjoin(char const *s1, char const *s2, int flag);
-void	error(int flag);
+void	error(char *meg, int flag);
 void	ft_close(int fd);
 void	move_fd(int to, int from);
 void	here_doc(char *limiter, int argc);
-void	exe_cmd(char *argv, int fd, char **envp);
+void	exe_cmd(char *argv, int fd, char **envp, int flag);
 void	ft_write(int fd, char *message, int len);
+void	find_cmd(int argc, char **argv, char **envp, int i);
+void	*freeing(char **str);
 size_t	ft_strlen(const char *s);
 
 #endif

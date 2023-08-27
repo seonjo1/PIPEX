@@ -6,19 +6,11 @@
 /*   By: seonjo <seonjo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 16:17:18 by seonjo            #+#    #+#             */
-/*   Updated: 2023/08/25 22:20:07 by seonjo           ###   ########.fr       */
+/*   Updated: 2023/08/27 20:56:36 by seonjo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-int	parents_do(pid_t pid, int *pipe_fd)
-{
-	ft_close(pipe_fd[1]);
-	waitpid(pid, NULL, 0);
-	move_fd(0, pipe_fd[0]);
-	return (1);
-}
 
 size_t	ft_strlen(const char *s)
 {
@@ -54,7 +46,7 @@ char	*ft_strjoin(char const *s1, char const *s2, int flag)
 	return (str);
 }
 
-char	*check_cmd(char	**cmd, char **envp)
+char	*check_cmd(char	**cmd, char **envp, int flag)
 {
 	int		i;
 	char	**envp_path;
@@ -67,31 +59,48 @@ char	*check_cmd(char	**cmd, char **envp)
 	i = 0;
 	while (envp_path[i] != NULL)
 	{
-		path = ft_strjoin(envp_path[i], cmd[0], 1);
+		path = ft_strjoin(envp_path[i++], cmd[0], 1);
 		if (path == NULL)
-			error(1);
+			error(NULL, 1);
 		if (access(path, X_OK | F_OK) == 0)
+		{
+			freeing(envp_path);
 			return (path);
-		i++;
+		}
+		free(path);
 	}
-	ft_printf("command not found: %s\n", cmd[0]);
-	return (NULL);
+	if (flag == 0)
+		ft_printf("bash: %s: command not found\n", cmd[0]);
+	return (freeing(envp_path));
 }
 
-void	exe_cmd(char *argv, int fd, char **envp)
-{	
+void	exe_cmd(char *argv, int fd, char **envp, int flag)
+{
 	char	**cmd;
+	char	*path;
 
 	cmd = ft_split(argv, ' ');
 	if (cmd == NULL)
-		error(1);
-	cmd[0] = check_cmd(cmd, envp);
-	if (cmd[0] == NULL)
+		error(NULL, 1);
+	path = check_cmd(cmd, envp, flag);
+	if (flag == 0)
+	{
+		freeing(cmd);
+		free(path);
+		return ;
+	}
+	if (path == NULL)
 		exit(1);
 	else
 	{
 		move_fd(1, fd);
-		if (execve(cmd[0], cmd, NULL) == -1)
-			error(1);
+		if (execve(path, cmd, NULL) == -1)
+			error(cmd[0], 1);
 	}
+}
+
+void	find_cmd(int argc, char **argv, char **envp, int i)
+{
+	while (i < argc - 2)
+		exe_cmd(argv[i++], 0, envp, 0);
 }
