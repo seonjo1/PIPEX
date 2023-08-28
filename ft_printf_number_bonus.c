@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_number.c                                 :+:      :+:    :+:   */
+/*   ft_printf_number_bonus.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seonjo <seonjo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/28 22:19:00 by seonjo            #+#    #+#             */
-/*   Updated: 2023/08/28 22:19:03 by seonjo           ###   ########.fr       */
+/*   Created: 2023/08/28 22:18:49 by seonjo            #+#    #+#             */
+/*   Updated: 2023/08/28 22:18:52 by seonjo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "ft_printf_bonus.h"
 
 static int	ft_putnbr2(long long num, int count)
 {

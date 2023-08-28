@@ -1,37 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_printf_bonus.h                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seonjo <seonjo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/01 18:08:01 by seonjo            #+#    #+#             */
-/*   Updated: 2023/08/28 18:05:34 by seonjo           ###   ########.fr       */
+/*   Created: 2023/03/23 16:43:44 by seonjo            #+#    #+#             */
+/*   Updated: 2023/08/28 17:59:15 by seonjo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef FT_PRINTF_BONUS_H
+# define FT_PRINTF_BONUS_H
 
+# include <stdarg.h>
 # include <stdlib.h>
 # include <unistd.h>
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1000000
-# endif
-
-typedef struct s_list
-{
-	int				fd;
-	char			buffer[BUFFER_SIZE + 1];
-	struct s_list	*next;
-}t_list;
-
-char	*get_next_line(int fd, int *flag);
-void	*all_free(t_list **head, int *flag);
-void	*free_dest(char *dest);
-void	*flag_set(int *flag);
-void	*remove_node(t_list **head, int fd);
-t_list	*find_node(t_list **head, int fd);
+int	ft_putnbr_16(unsigned int num, char opt, int *all_len);
+int	ft_putnbr_u(unsigned int n, int *all_len);
+int	ft_putnbr_d(int n, int *all_len);
+int	ft_putptr(void *ptr, int *all_len);
+int	ft_printf(const char *last, ...);
 
 #endif
