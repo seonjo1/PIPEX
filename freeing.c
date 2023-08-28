@@ -6,7 +6,7 @@
 /*   By: seonjo <seonjo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/27 19:24:40 by seonjo            #+#    #+#             */
-/*   Updated: 2023/08/27 20:54:49 by seonjo           ###   ########.fr       */
+/*   Updated: 2023/08/28 13:03:40 by seonjo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	*freeing(char **str)
 		i = 0;
 		while (str[i] != NULL)
 			free(str[i++]);
+		free(str);
 	}
 	return (NULL);
 }

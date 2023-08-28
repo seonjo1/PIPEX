@@ -6,7 +6,7 @@
 /*   By: seonjo <seonjo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 18:45:56 by seonjo            #+#    #+#             */
-/*   Updated: 2023/08/27 18:56:52 by seonjo           ###   ########.fr       */
+/*   Updated: 2023/08/28 12:47:37 by seonjo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,7 @@ int	ft_open(char *file, int flag)
 	else
 		fd = open(file, O_WRONLY | O_APPEND);
 	if (fd < 0)
-	{
 		error(file, 0);
-		return (-1);
-	}
 	return (fd);
 }
 

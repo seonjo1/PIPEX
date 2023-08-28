@@ -6,7 +6,7 @@
 /*   By: seonjo <seonjo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 15:54:02 by seonjo            #+#    #+#             */
-/*   Updated: 2023/08/27 19:37:17 by seonjo           ###   ########.fr       */
+/*   Updated: 2023/08/28 13:17:55 by seonjo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ int	main(int argc, char **argv, char **envp)
 	}
 	while (i < argc - 2)
 		do_pipe(argv[i++], envp);
-	if (fd2 != -1)
-		exe_cmd(argv[i], fd2, envp, 1);
+	if (fd2 == -1)
+		exit(1);
+	exe_cmd(argv[i], fd2, envp, 1);
 }
