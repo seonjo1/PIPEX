@@ -10,9 +10,11 @@ all : $(NAME)
 
 $(NAME) : $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	rm -f $(OBJS2)
 
 bonus : $(OBJS2)
 	$(CC) $(CFLAGS) $(OBJS2) -o $(NAME)
+	rm -f $(OBJS)
 	@touch bonus
 
 %.o : %.c
