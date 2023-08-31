@@ -6,7 +6,7 @@
 /*   By: seonjo <seonjo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 15:54:02 by seonjo            #+#    #+#             */
-/*   Updated: 2023/08/28 13:17:55 by seonjo           ###   ########.fr       */
+/*   Updated: 2023/08/31 18:01:47 by seonjo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,15 +76,8 @@ int	main(int argc, char **argv, char **envp)
 	int		fd2;
 
 	i = 2;
-	if (argc < 5)
+	if (argc != 5)
 		exit(1);
-	else if (ft_strncmp(argv[1], "here_doc", 9) == 0)
-	{
-		here_doc(argv[2], argc);
-		i++;
-		fd2 = open_fd2(argv[argc - 1], 0);
-		find_cmd(argc, argv, envp, i);
-	}
 	else
 	{
 		i += open_fd1(argv[1]);

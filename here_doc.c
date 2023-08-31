@@ -6,7 +6,7 @@
 /*   By: seonjo <seonjo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 18:20:11 by seonjo            #+#    #+#             */
-/*   Updated: 2023/08/28 18:01:41 by seonjo           ###   ########.fr       */
+/*   Updated: 2023/08/31 17:57:11 by seonjo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,31 +32,6 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	return (0);
 }
 
-static void	loop_find_limiter(char *limiter, int *pipe_fd)
-{
-	int		len;
-	int		flag;
-	char	*line;
-
-	flag = 0;
-	write(1, "pipe heredoc> ", 14);
-	len = ft_strlen(limiter);
-	line = get_next_line(0, &flag);
-	if (flag == 1)
-		error(NULL, 1);
-	while (ft_strncmp(limiter, line, len) != 0)
-	{
-		ft_write(1, "pipe heredoc> ", 14);
-		ft_write(pipe_fd[1], line, ft_strlen(line));
-		free(line);
-		line = get_next_line(0, &flag);
-		if (flag == 1)
-			error(NULL, 1);
-	}
-	if (line != NULL)
-		free(line);
-}
-
 void	here_doc(char *limiter, int argc)
 {
 	pid_t	pid;
@@ -74,12 +49,6 @@ void	here_doc(char *limiter, int argc)
 		ft_close(pipe_fd[0]);
 		if (limiter == NULL)
 			exit(0);
-		limiter = ft_strjoin(limiter, "\n", 0);
-		if (limiter == NULL)
-			error(NULL, 1);
-		loop_find_limiter(limiter, pipe_fd);
-		free(limiter);
-		exit(0);
 	}
 	else
 		parents_do(pid, pipe_fd);
